@@ -1,17 +1,20 @@
 <!-- tasks/templates/tasks/task_confirm_delete.html --> 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Confirm Delete</title>
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'tasks/styles.css' %}">
-</head>
-<body>
-    <h1>Are you sure you want to delete "{{ task.title }}"?</h1>
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit">Confirm Delete</button>
-    </form>
-    <a href="{% url 'task_list' %}">Cancel</a>
-</body>
-</html>
+{% extends 'tasks/base.html' %}
+
+{% block title %}Confirm Delete{% endblock %}
+{% block header %}Confirm Delete{% endblock %}
+
+{% block content %}
+    <div class="confirm-delete">
+        <h1>Are you sure you want to delete "{{ task.title }}"?</h1>
+        <p>This action cannot be undone.</p>
+        
+        <div class="confirm-actions">
+            <form method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Confirm Delete</button>
+            </form>
+            <a href="{% url 'task_list' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </div>
+{% endblock %}

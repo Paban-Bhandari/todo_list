@@ -1,25 +1,49 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>To-Do List</title>
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'tasks/styles.css' %}">
-</head>
-<body>
-    <h1>To-Do List</h1>
-    <a href="{% url 'task_create' %}">Add New Task</a>
-    <ul>
-        {% for task in tasks %}
-            <li>
-                {% if task.completed %}
-                    <strike>{{ task.title }}</strike>
-                {% else %}
-                    {{ task.title }}
-                    <a href="{% url 'task_complete' pk=task.pk %}">Mark as Complete</a>
-                {% endif %}
-                <a href="{% url 'task_delete' pk=task.pk %}">Delete</a>
-            </li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+{% extends 'tasks/base.html' %}
+
+{% block title %}My Todo List{% endblock %}
+{% block header %}My Todo List{% endblock %}
+
+{% block content %}
+    <div class="add-task-section">
+        <h2>Add New Task</h2>
+        <form method="post" action="{% url 'task_create' %}" class="task-form">
+            {% csrf_token %}
+            <input type="text" name="title" placeholder="Enter task title..." required>
+            <button type="submit" class="btn btn-primary">Add Task</button>
+        </form>
+    </div>
+
+    {% if tasks %}
+        <ul class="task-list">
+            {% for task in tasks %}
+                <li class="task-item {% if task.completed %}completed{% endif %}">
+                    <div class="task-content">
+                        <div class="task-title {% if task.completed %}completed{% endif %}">
+                            {{ task.title }}
+                        </div>
+                        <div class="task-meta">
+                            Created: {{ task.created_at|date:"M d, Y g:i A" }}
+                        </div>
+                    </div>
+                    <div class="task-actions">
+                        {% if task.completed %}
+                            <a href="{% url 'task_toggle' pk=task.pk %}" class="btn btn-warning">Mark Incomplete</a>
+                        {% else %}
+                            <a href="{% url 'task_toggle' pk=task.pk %}" class="btn btn-success">Mark Complete</a>
+                        {% endif %}
+                        <a href="{% url 'task_edit' pk=task.pk %}" class="btn btn-secondary">Edit</a>
+                        <form method="post" action="{% url 'task_delete' pk=task.pk %}" class="delete-form">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this task?')">Delete</button>
+                        </form>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="empty-state">
+            <h3>No tasks yet!</h3>
+            <p>Add your first task above to get started.</p>
+        </div>
+    {% endif %}
+{% endblock %}

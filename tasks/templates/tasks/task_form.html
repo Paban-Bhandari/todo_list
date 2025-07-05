@@ -1,17 +1,21 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Add New Task</title>
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'tasks/styles.css' %}">
-</head>
-<body>
-    <h1>Add New Task</h1>
-    <form method="post">
-        {% csrf_token %}
-        <input type="text" name="title" placeholder="Task Title">
-        <button type="submit">Add Task</button>
-    </form>
-    <a href="{% url 'task_list' %}">Back to List</a>
-</body>
-</html>
+{% extends 'tasks/base.html' %}
+
+{% block title %}{% if task %}Edit Task{% else %}Add New Task{% endif %}{% endblock %}
+{% block header %}{% if task %}Edit Task{% else %}Add New Task{% endif %}{% endblock %}
+
+{% block content %}
+    <div class="add-task-section">
+        <h2>{% if task %}Edit Task{% else %}Add New Task{% endif %}</h2>
+        <form method="post" class="task-form">
+            {% csrf_token %}
+            <input type="text" name="title" placeholder="Enter task title..." value="{% if task %}{{ task.title }}{% endif %}" required>
+            <button type="submit" class="btn btn-primary">
+                {% if task %}Update Task{% else %}Add Task{% endif %}
+            </button>
+        </form>
+    </div>
+    
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="{% url 'task_list' %}" class="back-link">← Back to Todo List</a>
+    </div>
+{% endblock %}
