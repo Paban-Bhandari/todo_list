@@ -10,14 +10,15 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>{% block header %}Todo List{% endblock %}</h1>
+            <h1>{% block header %}✓ Todo List{% endblock %}</h1>
+            <p>Stay organized and track your tasks</p>
         </div>
         <div class="content">
             {% if messages %}
                 <div class="messages">
                     {% for message in messages %}
                         <div class="message message-{{ message.tags }}">
-                            {{ message }}
+                            <span>{{ message }}</span>
                         </div>
                     {% endfor %}
                 </div>

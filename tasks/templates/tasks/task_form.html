@@ -4,18 +4,22 @@
 {% block header %}{% if task %}Edit Task{% else %}Add New Task{% endif %}{% endblock %}
 
 {% block content %}
-    <div class="add-task-section">
-        <h2>{% if task %}Edit Task{% else %}Add New Task{% endif %}</h2>
-        <form method="post" class="task-form">
-            {% csrf_token %}
-            <input type="text" name="title" placeholder="Enter task title..." value="{% if task %}{{ task.title }}{% endif %}" required>
-            <button type="submit" class="btn btn-primary">
-                {% if task %}Update Task{% else %}Add Task{% endif %}
-            </button>
-        </form>
-    </div>
-    
-    <div style="text-align: center; margin-top: 20px;">
-        <a href="{% url 'task_list' %}" class="back-link">← Back to Todo List</a>
+    <div class="form-container">
+        <div class="form-card">
+            <h2>{% if task %}📝 Edit Task{% else %}➕ Create New Task{% endif %}</h2>
+            <form method="post" class="task-form-full">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="title">Task Title</label>
+                    <input type="text" id="title" name="title" placeholder="What do you want to accomplish?" value="{% if task %}{{ task.title }}{% endif %}" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary btn-large">
+                        {% if task %}💾 Update Task{% else %}✓ Add Task{% endif %}
+                    </button>
+                    <a href="{% url 'task_list' %}" class="btn btn-secondary btn-large">Cancel</a>
+                </div>
+            </form>
+        </div>
     </div>
 {% endblock %}
